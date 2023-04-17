@@ -4,12 +4,15 @@ FROM archlinux:latest
 # Note: update (-u) so that the newly installed tools use up-to-date packages.
 #       For example, gcc (in base-devel) fails if it uses an old glibc (from
 #       base image).
+ARG CFLAGS="-march=alderlake -O3 -pipe -mpclmul -maes -falign-functions=32 -flto"
+ARG CXXFLAGS="-march=alderlake -O3 -pipe -mpclmul -maes -falign-functions=32 -flto"
 RUN pacman -Syu --noconfirm base-devel
 
 # Patch makepkg to allow running as root; see
 # https://www.reddit.com/r/archlinux/comments/6qu4jt/how_to_run_makepkg_in_docker_container_yes_as_root/
 RUN sed -i 's,exit $E_ROOT,echo but you know what you do,' /usr/bin/makepkg
-
+RUN sed -i '/CFLAGS=/c\CFLAGS=\x22-march=alderlake -O3 -pipe -mpclmul -maes -falign-functions=32 -flto -fgraphite-identity -floop-nest-optimize\x22' /etc/makepkg.conf
+RUN sed -i '/CXXFLAGS=/c\CXXFLAGS=\x22-march=alderlake -O3 -pipe -mpclmul -maes -falign-functions=32 -flto -fgraphite-identity -floop-nest-optimize\x22' /etc/makepkg.conf
 # Add the gpg key for 6BC26A17B9B7018A.
 # This should not be necessary.  It should be possible to use
 #     gpg --recv-keys --keyserver pgp.mit.edu 6BC26A17B9B7018A
