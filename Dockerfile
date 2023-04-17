@@ -26,8 +26,8 @@ RUN \
     useradd -m -g builder builder && \
     echo 'builder ALL = NOPASSWD: ALL' > /etc/sudoers.d/builder_pacman
 
-RUN sed -i '/CFLAGS=/c\CFLAGS=\x22-march=alderlake -O3 -pipe -mpclmul -maes -falign-functions=32 -flto -fgraphite-identity -floop-nest-optimize\x22' /etc/makepkg.conf
-RUN sed -i '/CXXFLAGS=/c\CXXFLAGS=\x22-march=alderlake -O3 -pipe -mpclmul -maes -falign-functions=32 -flto -fgraphite-identity -floop-nest-optimize\x22' /etc/makepkg.conf
+RUN sed -i '0,/CFLAGS=/c\CFLAGS=\x22-march=alderlake -O3 -pipe -mpclmul -maes -falign-functions=32 -flto -fgraphite-identity -floop-nest-optimize\x22' /etc/makepkg.conf
+RUN sed -i '0,/CXXFLAGS=/c\CXXFLAGS=\x22-march=alderlake -O3 -pipe -mpclmul -maes -falign-functions=32 -flto -fgraphite-identity -floop-nest-optimize\x22' /etc/makepkg.conf
 
 USER builder
 
